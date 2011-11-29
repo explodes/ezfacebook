@@ -26,7 +26,7 @@ setup(
     packages=find_packages(exclude=[
     ]),
     include_package_data=True,
-    test_suite=None,
+    test_suite="ezfacebook.tests",
     package_data={},
     zip_safe=True,
     entry_points="""
