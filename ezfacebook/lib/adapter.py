@@ -91,7 +91,6 @@ class FacebookGraphAPI(api.GraphAPI):
     Wrapper for the "official" GraphAPI object, the difference is that this object is aware of guid & token.
     Extend this object to add your most frequently used functions, such as posting a link to a wall, vs posting a picture to a wall...
     """
-
     def __init__(self, facebook_guid, access_token):
         super(FacebookGraphAPI, self).__init__(access_token)
         self.facebook_guid = facebook_guid
