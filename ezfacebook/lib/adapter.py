@@ -9,8 +9,8 @@ from . import api
 __all__ = [
     'FacebookGraphAPI',
     'parse_signed_request',
-    'parse_cookie',
-    'get_graph_from_cookie',
+    'parse_cookies',
+    'get_graph_from_cookies',
 ]
 
 def _base64_url_decode(inp):
@@ -19,6 +19,31 @@ def _base64_url_decode(inp):
     return base64.b64decode(unicode(inp).translate(dict(zip(map(ord, u'-_'), u'+/'))))
 
 def parse_signed_request(signed_request, secret):
+    """
+    Parse a signed request based on the secret and return the data (dictionary)
+    Returns None on failure.
+    
+    example return value:
+    
+        {
+         u'user_id': u'1234567890', 
+         u'algorithm': u'HMAC-SHA256', 
+         u'expires': 1322683200, 
+         u'oauth_token': u'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop', 
+         u'user': {
+             u'locale': u'en_US', 
+             u'country': u'us', 
+             u'age': {u'min': 21}
+         }, 
+         u'issued_at': 1322676598, 
+         u'page': {
+             u'admin': False, 
+             u'liked': True, 
+             u'id': u'46326540287'
+         }
+        }
+    
+    """
     l = signed_request.split('.', 2)
     encoded_sig = l[0]
     payload = l[1]
@@ -36,13 +61,28 @@ def parse_signed_request(signed_request, secret):
     else:
         return data
 
-def parse_cookie(cookies, app_id, app_secret):
+def parse_cookies(cookies, app_id, app_secret):
+    """
+    Parse cookies and return the Facebook GUID and Access Token found in the cookie, or None.
+    
+    example:
+        >>> parse_cookies(request.cookies, settings.FACEBOOK_SETTINGS['my_first_fb_app']['app_id'], settings.FACEBOOK_SETTINGS['my_first_fb_app']['secret'])
+        ('1234567890', 'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop')
+        
+        or 
+        
+        >>> print parse_cookies(request.cookies, settings.FACEBOOK_SETTINGS['my_first_fb_app']['app_id'], settings.FACEBOOK_SETTINGS['my_first_fb_app']['secret'])
+        None
+    """
     result = api.get_user_from_cookie(cookies, app_id, app_secret)
-    if result:
+    if result: # result: {'access_token': 'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop', 'uid': u'1234567890'}
         return result['uid'], result['access_token']
 
-def get_graph_from_cookie(cookies, app_id, app_secret):
-    result = parse_cookie(cookies, app_id, app_secret)
+def get_graph_from_cookies(cookies, app_id, app_secret):
+    """
+    Returns a FacebookGraphAPI instance, or None, based on cookies.
+    """
+    result = parse_cookies(cookies, app_id, app_secret)
     if result:
         return FacebookGraphAPI(*result)
 
