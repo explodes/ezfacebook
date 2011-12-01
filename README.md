@@ -2,7 +2,6 @@
 
 * Under Development, not for production *
 
-_The exact framework is TBD, to allow multiple facebook apps to be used in a single site. This may or may not be a popular feature, let me know what you think..._
 
 The purpose of this package is to make facebook integration with web apps used as page tabs, web apps, 
 
