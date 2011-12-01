@@ -31,14 +31,14 @@ setup(
     zip_safe=True,
     entry_points="""
     """,
-    license="Lesser GNU General Public License (LGPL)",
+    license="Apache Software License",
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.6",
         "Development Status :: 4 - Beta",
         "Environment :: Other Environment",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+        "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Framework :: Django",

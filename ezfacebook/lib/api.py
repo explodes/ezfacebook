@@ -14,6 +14,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""
+THIS FILE HAS BEEN MODIFIED BY EVAN LEIS.
+MODIFICATIONS INCLUDE BUT ARE NOT LIMITED TO:
+- RENAMING VARIABLES
+- FIXING BUGS
+"""
+
 """Python client library for the Facebook Platform.
 
 This client library is designed to support the Graph API and the official
