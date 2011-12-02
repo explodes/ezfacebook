@@ -1,17 +1,9 @@
-from django.conf import settings
-
-from ..lib import adapter
+from ..lib import adapter, settings
 
 __all__ = [
     'graph_from_cookies',
     'parse_signed_request',
 ]
-
-def _app_settings(app_name_or_settings):
-    if isinstance(app_name_or_settings, (str, unicode)):
-        return getattr(settings.FACEBOOK_SETTINGS, app_name_or_settings)
-    else:
-        return app_name_or_settings
 
 def _inject_arg_decorator(app_settings, arg_injector):
     def _wrapper(func):
@@ -43,7 +35,7 @@ def graph_from_cookies(app_name):
             
             return direct_to_template(request, 'success.html')
     """
-    app_settings = _app_settings(app_name)
+    app_settings = settings.app_settings(app_name)
 
     if app_settings.debug_guid != False and app_settings.debug_token != False:
         # Use debug mode
@@ -95,7 +87,7 @@ def parse_signed_request(app_name):
                         return direct_to_template(request, 'liked.html')
             return direct_to_template(request, 'unliked.html')
     """
-    app_settings = _app_settings(app_name)
+    app_settings = settings.app_settings(app_name)
 
     if app_settings.debug_signed_request != False:
         return _inject_arg_decorator(app_settings, _debug_parse_signed_request)
