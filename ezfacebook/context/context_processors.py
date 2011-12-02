@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from . import urls
 from .templatetags import absurl
 
 def facebook(request):
@@ -35,8 +36,8 @@ def _urls(request):
     - FACEBOOK_CHANNEL_URL : The absolute URL to channel.html
     
     """
-    relative_channel_url = reverse('facebook-channel-url')
-    absolute_channel_url = absurl.absolute_url(relative_channel_url, request=request, strip_protocol=True)
+    relative_channel_url = reverse('facebook-channel-url', urlconf=urls)
+    absolute_channel_url = absurl.absolute_url(relative_channel_url, request=request)
     return {
         'FACEBOOK_CHANNEL_URL' : absolute_channel_url
     }
