@@ -9,6 +9,7 @@ MIDDLEWARE_CLASSES = (
 
 INSTALLED_APPS = (
     'django.contrib.sites', # ezfacebook.context: Requirement
+    'ezfacebook.context', # ezfacebook.context: Optional, allows templatetags absurl
 )
 
 class FACEBOOK_SETTINGS: # ezfacebook.user, ezfacebook.context: Requirement
