@@ -45,11 +45,11 @@ def graph_from_cookies(app_name):
         return _inject_arg_decorator(app_settings, _graph_from_cookies)
 
 def _debug_graph_from_cookies(request, app_settings):
-    graph = adapter.FacebookGraphAPI(app_settings.debug_guid, app_settings.debug_token)
+    graph = adapter._getFacebookGraphAPIClass()(app_settings.debug_guid, app_settings.debug_token)
     return graph
 
 def _graph_from_cookies(request, app_settings):
-    graph = adapter.parse_cookies(request.cookies, app_settings.app_id, app_settings.secret)
+    graph = adapter.get_graph_from_cookies(request.COOKIES, app_settings.app_id, app_settings.secret)
     return graph
 
 def parse_signed_request(app_name):
@@ -92,7 +92,7 @@ def parse_signed_request(app_name):
     if app_settings.debug_signed_request != False:
         return _inject_arg_decorator(app_settings, _debug_parse_signed_request)
     else:
-        return _parse_signed_request(app_settings, _parse_signed_request)
+        return _inject_arg_decorator(app_settings, _parse_signed_request)
 
 def _debug_parse_signed_request(request, app_settings):
     signed_request_data = app_settings.debug_signed_request

@@ -73,12 +73,12 @@ def parse_cookies(cookies, app_id, app_secret):
     Parse cookies and return the Facebook GUID and Access Token found in the cookie, or None.
     
     example:
-        >>> parse_cookies(request.cookies, 'my_app_id', 'my_secret')
+        >>> parse_cookies(request.COOKIES, 'my_app_id', 'my_secret')
         ('1234567890', 'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop')
         
         or 
         
-        >>> print parse_cookies(request.cookies, 'my_app_id', 'my_secret')
+        >>> print parse_cookies(request.COOKIES, 'my_app_id', 'my_secret')
         None
     """
     result = api.get_user_from_cookie(cookies, app_id, app_secret)
@@ -114,12 +114,12 @@ def get_graph_from_cookies(cookies, app_id, app_secret):
     
     Example:
     
-        >>> get_graph_from_cookies(request.cookies, 'my_app_id', 'my_secret')
+        >>> get_graph_from_cookies(request.COOKIES, 'my_app_id', 'my_secret')
         <MyFacebookGraphAPI>
         
         or 
         
-        >>> print get_graph_from_cookies(request.cookies, 'my_app_id', 'my_secret')
+        >>> print get_graph_from_cookies(request.COOKIES, 'my_app_id', 'my_secret')
         None
     """
     result = parse_cookies(cookies, app_id, app_secret)
