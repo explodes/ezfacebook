@@ -12,7 +12,7 @@ with open('README.md') as readme:
 
 setup(
     name='ezfacebook',
-    version='0.0.1',
+    version='0.75',
     description="Django Tools to use facebook seamlessly",
     long_description=long_description,
     author='Evan Leis',

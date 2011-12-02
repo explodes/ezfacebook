@@ -1,5 +1,7 @@
 # EZ-Facebook Django Utils (for django 1.3+)
 
+* WORKING BETA *
+
 The purpose of this package is to make facebook integration with:
 
 - Web sites
