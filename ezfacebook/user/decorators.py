@@ -15,7 +15,7 @@ def _inject_arg_decorator(app_settings, arg_injector):
 
 def graph_from_cookies(app_name):
     """
-    Put a FacebookGraphAPI object into the function arguments, after request.
+    Put a FacebookGraphAPI (or specified subclass) object into the function arguments, after request.
     
     example:
     

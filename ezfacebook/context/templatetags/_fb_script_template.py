@@ -4,10 +4,6 @@ TEMPLATE_TEXT = '''{% load absurl %}
 <div id="fb-root"></div>
 {% url facebook-channel-html as channel_url %}
 <script type="text/javascript">
-function fbConnect(callback) { FB.login(function (response) { if (callback) { callback(response); } }, {scope: '{{ app_settings.scope }}'}); }
-function fbDisconnect(callback) { FB.logout(function (response) { if (callback) { callback(response); }; }); }
-function fbConnectWithReload(callback) { fbConnect(function() { window.location.reload(); }); }
-function fbDisconnectWithReload(callback) { fbDisconnect(function() { window.location.reload(); }); }
 function appendScriptToFBRoot(src){ var e = document.createElement('script'); e.async = true; e.src = document.location.protocol + src; document.getElementById('fb-root').appendChild(e); }
 window.fbAsyncInit = function() {
     FB.init({

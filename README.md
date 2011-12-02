@@ -1,21 +1,20 @@
 # EZ-Facebook Django Utils (for django 1.3+)
 
-* Under Development, not for production *
-
-
 The purpose of this package is to make facebook integration with:
+
 - Web sites
 - Page Tabs
 - Facebook App Pages
 
 Included in the suite are:
+
 - Easy to use facebook settings with debug settings
-- Facebook script template tags
-- P3P Cookie middleware to enable the use of cookies in your iframes
-- Facebook Settings context processors
-- Facebook Channel URL context variable and view
-- Absolute Url template tag, minds current protocol. Useful for posting links and images.
 - View decorators that extract information from requests, like signed_request, and facebook graph api. 
+- Facebook script template tags
+- Facebook Channel URL context variable and view
+- Facebook Settings context processors
+- Absolute Url template tag, minds current protocol. Useful for posting links and images.
+- P3P Cookie middleware to enable the use of cookies in your iframes
 
 For installation please see:
 
@@ -23,42 +22,45 @@ For installation please see:
 
 # Installation
 
-## Settings :: example settings.py
+## Settings :: example `settings.py` file
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'ezfacebook.context.context_processors.facebook', # ezfacebook.context: Requirement
-)
-
-MIDDLEWARE_CLASSES = (
-    'ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware' # ezfacebook.helpers: Optional
-)
-
-INSTALLED_APPS = (
-    'django.contrib.sites', # ezfacebook.context: Requirement
-    'ezfacebook.context', # ezfacebook.context: Optional, allows templatetags absurl
-)
-
-class FACEBOOK_SETTINGS: # ezfacebook.user, ezfacebook.context: Requirement
-
-    class my_first_fb_app:
-        app_id = '00000000000000',
-        secret = 'abcdef0123456789',
-        scope = 'email,publish_stream,offline_access'
-
-        debug_signed_request = {'id': 23840238402834} # 
-        debug_guid = 23840238402834
-        debug_token = 'AAAAAAAAAbbbbbbbbbbccccdefffffffffffffffffffetc'
-
-    class my_second_fb_app:
-        app_id = '11111111111111',
-        secret = '9876543210abcdef',
-        scope = ''
-
-        debug_signed_request = False
-        debug_guid = False
-        debug_token = False
+	TEMPLATE_CONTEXT_PROCESSORS = (
+	    'ezfacebook.context.context_processors.facebook', # ezfacebook.context: Requirement
+	)
+	
+	MIDDLEWARE_CLASSES = (
+	    'ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware' # ezfacebook.helpers: Optional
+	)
+	
+	INSTALLED_APPS = (
+	    'django.contrib.sites', # ezfacebook.context: Requirement
+	    'ezfacebook.context', # ezfacebook.context: Optional, allows templatetags absurl
+	)
+	
+	# Overrides original FacebookGraphAPI class
+	FACEBOOK_GRAPH_API_CLASS = 'myproject.myapp.lib.facebook.MyFacebookGraphAPI' # ezfacebook.lib (affects ezfacebook.user), Optional
+	
+	class FACEBOOK_SETTINGS: # ezfacebook.user, ezfacebook.context: Requirement
+	
+	    class my_first_fb_app:
+	        app_id = '00000000000000',
+	        secret = 'abcdef0123456789',
+	        scope = 'email,publish_stream,offline_access'
+	
+	        debug_signed_request = {'id': 23840238402834} # 
+	        debug_guid = 23840238402834
+	        debug_token = 'AAAAAAAAAbbbbbbbbbbccccdefffffffffffffffffffetc'
+	
+	    class my_second_fb_app:
+	        app_id = '11111111111111',
+	        secret = '9876543210abcdef',
+	        scope = ''
+	
+	        debug_signed_request = False
+	        debug_guid = False
+	        debug_token = False
         
-## URLS :: example urls.py
+## URLS :: example `urls.py` file
 
 from django.conf.urls.defaults import patterns, include, url
 
@@ -69,7 +71,7 @@ urlpatterns = patterns('',
 
 # Packages
 
-## Context :: ezfacebook.context, installable app.
+## Context :: `ezfacebook.context`, installable app (if necessary)
 
 This packages comes with the following features:
 
@@ -77,13 +79,13 @@ This packages comes with the following features:
 - Context Processors
 - channel.html view
 
-### Template Tags
+### Template Tags :: `ezfacebook.context.templatetags`
 
 This package must be installed in your application to use template tags.
 
-#### absurl
+#### `absurl` :: `ezfacebook.context.templatetags.absurl`
 
-##### absolute_url
+##### `absolute_url` :: `ezfacebook.context.templatetags.absurl.absolute_url`
 
 Builds an absolute URL for the given path.
 If request is provided, the protocol (http or https) is determined from the request, otherwise http is used.
@@ -95,11 +97,11 @@ Example:
 	{{ obj.image.url|absolute_url }}
 	{{ obj.image.url|absolute_url:request }}
 
-#### fb_script
+#### `fb_script` :: `ezfacebook.context.templatetags.fb_script`
 
 These template tags render the HTML required to the Facebook Javascript SDK.
 
-##### fb_script
+##### `fb_script` :: `ezfacebook.context.templatetags.fb_script.fb_script`
 
 Renders the Facebook Javascript SDK script required for facebook connectivity.
 
@@ -117,7 +119,7 @@ Example:
     {# See http://bugs.developers.facebook.net/show_bug.cgi?id=20168= #}
     {% fb_script 'my_first_fb_app' fix_20168=True %} 
 
-##### fb_script_with_canvas
+##### `fb_script_with_canvas` :: `ezfacebook.context.templatetags.fb_script.fb_script_with_canvas`
 
 Renders the Facebook Javascript SDK script required for facebook connectivity and sets the Facebook Canvas size.
     
@@ -135,50 +137,122 @@ Example:
     {# See http://bugs.developers.facebook.net/show_bug.cgi?id=20168= #}
     {% fb_script_with_canvas 'my_first_fb_app' canvas_height=2000 canvas_width=500 fix_20168=True %} 
 	
-## Helpers
+## Helpers :: `ezfacebook.helpers`
+
+This packages comes with the following features:
+
+- Middleware
 	
-### Middleware
+### Middleware :: `ezfacebook.helpers.middleware`
 
 This package has middleware to help out your application.
 
-
-#### IEIFrameApplicationMiddleware
+#### `IEIFrameApplicationMiddleware` :: `ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware`
 
 It is not necessary to install this package as an app to use this middleware.
 
 Sets response headers (P3P policy) to allow IE 7-8 to use cookies inside of an iframe.
 This is useful for websites that are put in iframes on facebook, such as page tabs and facebook apps.
 
-To use it, simply add ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware to MIDDLEWARE_CLASSES in your settings file. 
+To use it, simply add 'ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware' to MIDDLEWARE_CLASSES in your settings file. 
 
-## Lib
+## Lib :: `ezfacebook.lib`
 
-### adapter
+This packages comes with the following features:
 
-#### parse_signed_request
+- Facebook Graph API
+- Library Functions
 
-#### parse_cookies
+### Adapter :: `ezfacebook.lib.adapter`
 
-#### get_graph_from_cookies
+#### `FacebookGraphAPI` :: `ezfacebook.lib.adapter.FacebookGraphAPI`
 
-#### FacebookGraphAPI
+Wrapper for the "official" `GraphAPI` object, the difference is that this object is aware of guid & token.
+Extend this object to add your most frequently used functions, such as posting a link to a wall, vs posting a picture to a wall...
+    
+If you extend this class, be sure to set `FACEBOOK_GRAPH_API_CLASS` in your settings file so that is used by default.
 
-## User
+#### `parse_signed_request` :: `ezfacebook.lib.adapter.parse_signed_request`
+
+Parse a signed request based on the secret and return the data (dictionary)
+Returns `None` if the signed_request did not parse properly.
+    
+Example:
+    
+    >>> parse_signed_request(request.POST['signed_request'], 'my_secret')
+    {
+     u'user_id': u'1234567890', 
+     u'algorithm': u'HMAC-SHA256', 
+     u'expires': 1322683200, 
+     u'oauth_token': u'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop', 
+     u'user': {
+         u'locale': u'en_US', 
+         u'country': u'us', 
+         u'age': {u'min': 21}
+     }, 
+     u'issued_at': 1322676598, 
+     u'page': {
+         u'admin': False, 
+         u'liked': True, 
+         u'id': u'46326540287'
+     }
+    }
+    
+    or 
+    
+    >>> print parse_signed_request(request.POST['signed_request'], 'my_secret')
+    None
+
+#### `parse_cookies` :: `ezfacebook.lib.adapter.parse_cookies`
+
+Parse cookies and return the Facebook GUID and Access Token found in the cookie, or `None`.
+    
+Example:
+    
+    >>> parse_cookies(request.cookies, 'my_app_id', 'my_secret')
+    ('1234567890', 'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop')
+    
+    or 
+    
+    >>> print parse_cookies(request.cookies, 'my_app_id', 'my_secret')
+    None
+
+#### `get_graph_from_cookies` :: `ezfacebook.lib.adapter.get_graph_from_cookies`
+
+Returns a `FacebookGraphAPI` instance or subclass (as specified in the settings), or `None`, based on cookies.
+    
+Example:
+    
+    >>> get_graph_from_cookies(request.cookies, 'my_app_id', 'my_secret')
+    <MyFacebookGraphAPI>
+    
+    or 
+    
+    >>> print get_graph_from_cookies(request.cookies, 'my_app_id', 'my_secret')
+    None
+
+## User :: `ezfacebook.user`
 
 This package is responsible for extracting user information from a request.
 Currently this is done with the use of decorators.
-In the future, some kind of middleware may be used.
+In the future, some kind of middleware may be added.
 
-### Decorators
+This packages comes with the following features:
+
+- Decorators
+
+### Decorators :: `ezfacebook.user.decorators`
 
 These decorators are used on view functions, they will inject the results as the parameter after request.
 Any other arguments or keyword arguments are still sent to the view.
 
-#### parseSignedRequest
+#### `parseSignedRequest` :: `ezfacebook.user.decorators.parseSignedRequest`
 
 Injects a decrypted signed_request into your view function.
-It can be None.
+It can be `None`.
 A signed request is good for a lot of things, of which can be found at http://developers.facebook.com/docs/authentication/signed_request/
+
+Example:
 
 	from django.conf import settings
     from django.core.urlresolvers import reverse
@@ -209,11 +283,13 @@ A signed request is good for a lot of things, of which can be found at http://de
                     return direct_to_template(request, 'liked.html')
         return direct_to_template(request, 'unliked.html')
 			
-#### graphFromCookies
+#### `graphFromCookies` :: `ezfacebook.user.decorators.graphFromCookies`
 
-Injects a FacebookGraphAPI into your view function.
-It can be None.
-FacebookGraphAPI is great for making requests to facebook.com, those requests can be found at https://developers.facebook.com/docs/reference/api/
+Injects a `FacebookGraphAPI` (or specified subclass) into your view function.
+It can be `None`.
+`FacebookGraphAPI` is great for making requests to facebook.com, those requests can be found at https://developers.facebook.com/docs/reference/api/
+
+Example:
 
 	from django.conf import settings
     from django.core.urlresolvers import reverse
@@ -230,6 +306,5 @@ FacebookGraphAPI is great for making requests to facebook.com, those requests ca
         graph.put_object("me", "feed", picture=image_url, name='Whatsup', description='Hello', link=link, caption='Pow Mow Local')
         
         return direct_to_template(request, 'success.html')
-
 			
 		

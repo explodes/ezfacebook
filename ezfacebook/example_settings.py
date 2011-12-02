@@ -12,6 +12,9 @@ INSTALLED_APPS = (
     'ezfacebook.context', # ezfacebook.context: Optional, allows templatetags absurl
 )
 
+# Overrides original FacebookGraphAPI class
+FACEBOOK_GRAPH_API_CLASS = 'myproject.myapp.lib.facebook.MyFacebookGraphAPI' # ezfacebook.lib (affects ezfacebook.user), Optional
+
 class FACEBOOK_SETTINGS: # ezfacebook.user, ezfacebook.context: Requirement
 
     class my_first_fb_app:

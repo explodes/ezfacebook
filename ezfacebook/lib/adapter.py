@@ -2,7 +2,8 @@ import base64
 import hashlib
 import hmac
 
-from django.utils import simplejson
+from django.conf import settings
+from django.utils import simplejson, importlib
 
 from . import api
 
@@ -23,8 +24,9 @@ def parse_signed_request(signed_request, secret):
     Parse a signed request based on the secret and return the data (dictionary)
     Returns None on failure.
     
-    example return value:
+    Example:
     
+        >>> parse_signed_request(request.POST['signed_request'], 'my_secret')
         {
          u'user_id': u'1234567890', 
          u'algorithm': u'HMAC-SHA256', 
@@ -42,7 +44,12 @@ def parse_signed_request(signed_request, secret):
              u'id': u'46326540287'
          }
         }
-    
+        
+        or 
+        
+        >>> print parse_signed_request(request.POST['signed_request'], 'my_secret')
+        None
+        
     """
     l = signed_request.split('.', 2)
     encoded_sig = l[0]
@@ -66,32 +73,55 @@ def parse_cookies(cookies, app_id, app_secret):
     Parse cookies and return the Facebook GUID and Access Token found in the cookie, or None.
     
     example:
-        >>> parse_cookies(request.cookies, settings.FACEBOOK_SETTINGS['my_first_fb_app']['app_id'], settings.FACEBOOK_SETTINGS['my_first_fb_app']['secret'])
+        >>> parse_cookies(request.cookies, 'my_app_id', 'my_secret')
         ('1234567890', 'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop')
         
         or 
         
-        >>> print parse_cookies(request.cookies, settings.FACEBOOK_SETTINGS['my_first_fb_app']['app_id'], settings.FACEBOOK_SETTINGS['my_first_fb_app']['secret'])
+        >>> print parse_cookies(request.cookies, 'my_app_id', 'my_secret')
         None
     """
     result = api.get_user_from_cookie(cookies, app_id, app_secret)
     if result: # result: {'access_token': 'AAAAAABbbbcccccddddddeeeeeeeeeeeffffffffgHHHHHhhhhhhhhhhIjlkmop', 'uid': u'1234567890'}
         return result['uid'], result['access_token']
 
-def get_graph_from_cookies(cookies, app_id, app_secret):
-    """
-    Returns a FacebookGraphAPI instance, or None, based on cookies.
-    """
-    result = parse_cookies(cookies, app_id, app_secret)
-    if result:
-        return FacebookGraphAPI(*result)
-
 class FacebookGraphAPI(api.GraphAPI):
     """
     Wrapper for the "official" GraphAPI object, the difference is that this object is aware of guid & token.
     Extend this object to add your most frequently used functions, such as posting a link to a wall, vs posting a picture to a wall...
+    
+    If you extend this class, be sure to set FACEBOOK_GRAPH_API_CLASS in your settings file so that is used by default.
     """
     def __init__(self, facebook_guid, access_token):
         super(FacebookGraphAPI, self).__init__(access_token)
         self.facebook_guid = facebook_guid
         self.access_token = access_token
+
+def _getFacebookGraphAPIClass():
+    if hasattr(settings, 'FACEBOOK_GRAPH_API_CLASS'):
+        classpath = settings.FACEBOOK_GRAPH_API_CLASS
+        paths = classpath.split('.')
+        class_name = paths[-1]
+        package_path = '.'.join(paths[:-1])
+        package = importlib.import_module(package_path)
+        return getattr(package, class_name)
+    else:
+        return FacebookGraphAPI
+
+def get_graph_from_cookies(cookies, app_id, app_secret):
+    """
+    Returns a FacebookGraphAPI instance or subclass (as specified in the settings), or None, based on cookies.
+    
+    Example:
+    
+        >>> get_graph_from_cookies(request.cookies, 'my_app_id', 'my_secret')
+        <MyFacebookGraphAPI>
+        
+        or 
+        
+        >>> print get_graph_from_cookies(request.cookies, 'my_app_id', 'my_secret')
+        None
+    """
+    result = parse_cookies(cookies, app_id, app_secret)
+    if result:
+        return _getFacebookGraphAPIClass()(*result)
