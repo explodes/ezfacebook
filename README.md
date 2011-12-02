@@ -2,11 +2,13 @@
 
 * WORKING BETA *
 
-The purpose of this package is to make facebook integration with:
+The purpose of this package is to make facebook integration easy WITHOUT having to make your whole app depend on this package.
 
-- Web sites
-- Page Tabs
-- Facebook App Pages
+This package makes facebook integration easy for all kinds of web sites:
+
+- Web Applications
+- Facebook Page Tabs
+- Facebook Applications
 
 Included in the suite are:
 
