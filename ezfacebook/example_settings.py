@@ -9,10 +9,9 @@ MIDDLEWARE_CLASSES = (
 
 INSTALLED_APPS = (
     'django.contrib.sites', # ezfacebook.context: Requirement
-    'ezfacebook.context', # ezfacebook.context: Requirement
 )
 
-class FACEBOOK_SETTINGS: # ezfacebook.user: Requirement
+class FACEBOOK_SETTINGS: # ezfacebook.user, ezfacebook.context: Requirement
 
     class my_first_fb_app:
         app_id = '00000000000000',

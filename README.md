@@ -8,6 +8,8 @@ The purpose of this package is to make facebook integration with web apps used a
 
 The current "apps" are context, helpers, and user...
 
+(See also ezfacebook/example_settings.py and ezfacebook/example_urls.py)
+
 
 ## Context
 
