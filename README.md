@@ -60,6 +60,18 @@ This 'app' has middleware to help out your application.
 Sets response headers (P3P policy) to allow IE 7-8 to use cookies inside of an iframe.
 This is useful for websites that are put in iframes on facebook, such as page tabs and facebook apps.
 
+## Lib
+
+### adapter
+
+#### parse_signed_request
+
+#### parse_cookies
+
+#### get_graph_from_cookies
+
+#### FacebookGraphAPI
+
 ## User
 
 Under development, the idea here is to use decorators to pass extra variables into views, such as a facebook_user, whether or not they like an app, and their current access rights.
