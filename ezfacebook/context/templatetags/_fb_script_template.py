@@ -18,8 +18,8 @@ window.fbAsyncInit = function() {
         xfbml      : true,  // parse XFBML
         channelUrl : '{{ channel_url|absolute_url:request }}'
     });
-    {% if ie_fix_20168 %}FB.UIServer.setLoadedNode = function (a, b){FB.UIServer._loadedNodes[a.id] = b; }{% endif %}
-    {% if ie_fix_19042 %}FB.UIServer.setActiveNode = function(a,b){FB.UIServer._active[a.id]=b;}{% endif %}
+    {% if fix_20168 %}FB.UIServer.setLoadedNode = function (a, b){FB.UIServer._loadedNodes[a.id] = b; }{% endif %}
+    {% if fix_19042 %}FB.UIServer.setActiveNode = function(a,b){FB.UIServer._active[a.id]=b;}{% endif %}
     {% if use_share %}appendScriptToFBRoot('//static.ak.fbcdn.net/connect.php/js/FB.Share');{% endif %}
     {% if canvas_height %}FB.Canvas.setSize({ width : {{ canvas_width|default_if_none:500 }}, height : {{ canvas_height }} });{% endif %}
 };

@@ -14,14 +14,14 @@ class FBScriptNode(template.Node):
     Optionally applies IE monkey patches 19042 and 20168
     """
 
-    def __init__(self, app_settings, use_share=False, canvas_height=None, canvas_width=None, ie_fix_19042=False, ie_fix_20168=False):
+    def __init__(self, app_settings, use_share=False, canvas_height=None, canvas_width=None, fix_19042=False, fix_20168=False):
         self.template_vars = dict(
             app_settings=app_settings,
             use_share=self._bool_str(use_share, False),
             canvas_height=self._int_str(canvas_height),
             canvas_width=self._int_str(canvas_width),
-            ie_fix_19042=self._bool_str(ie_fix_19042, False),
-            ie_fix_20168=self._bool_str(ie_fix_20168, False),
+            fix_19042=self._bool_str(fix_19042, False),
+            fix_20168=self._bool_str(fix_20168, False),
         )
 
     def _int_str(self, string):
@@ -93,21 +93,36 @@ def _parse_token(token, allowed_params=None):
 
 @register.tag()
 def fb_script(parser, token):
-    app_settings, params = _parse_token(token, allowed_params=['ie_fix_19042', 'ie_fix_20168'])
+    """
+    Renders the Facebook Javascript SDK script required for facebook connectivity.
+    Example:
+    {% load fb_script %}
+    
+    {% fb_script 'my_first_fb_app' %}
+    
+    {# See http://bugs.developers.facebook.net/show_bug.cgi?id=19042 #}
+    {% fb_script 'my_first_fb_app' fix_19042=True %} 
+    
+    {# See http://bugs.developers.facebook.net/show_bug.cgi?id=20168= #}
+    {% fb_script 'my_first_fb_app' fix_20168=True %} 
+    """
+    app_settings, params = _parse_token(token, allowed_params=['fix_19042', 'fix_20168', 'use_share'])
     return FBScriptNode(app_settings, **params)
-
-@register.tag()
-def fb_script_with_share(parser, token):
-    app_settings, params = _parse_token(token, allowed_params=['ie_fix_19042', 'ie_fix_20168'])
-    return FBScriptNode(app_settings, use_share=True, **params)
 
 @register.tag()
 def fb_script_with_canvas(parser, token):
-    app_settings, params = _parse_token(token, allowed_params=['canvas_height', 'canvas_width', 'ie_fix_19042', 'ie_fix_20168'])
+    """
+    Renders the Facebook Javascript SDK script required for facebook connectivity and sets the Facebook Canvas size.
+    Example:
+    {% load fb_script %}
+    
+    {% fb_script_with_canvas 'my_first_fb_app' canvas_height=2000 canvas_width=500 %} {# 500 is the recommended width for a Page Tab #}
+    
+    {# See http://bugs.developers.facebook.net/show_bug.cgi?id=19042 #}
+    {% fb_script_with_canvas 'my_first_fb_app' canvas_height=2000 canvas_width=500 fix_19042=True %} 
+    
+    {# See http://bugs.developers.facebook.net/show_bug.cgi?id=20168= #}
+    {% fb_script_with_canvas 'my_first_fb_app' canvas_height=2000 canvas_width=500 fix_20168=True %} 
+    """
+    app_settings, params = _parse_token(token, allowed_params=['canvas_height', 'canvas_width', 'fix_19042', 'fix_20168', 'use_share'])
     return FBScriptNode(app_settings, **params)
-
-@register.tag()
-def fb_script_with_canvas_and_share(parser, token):
-    app_settings, params = _parse_token(token, allowed_params=['canvas_height', 'canvas_width', 'ie_fix_19042', 'ie_fix_20168'])
-    return FBScriptNode(app_settings, use_share=True, **params)
-
