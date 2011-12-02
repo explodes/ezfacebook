@@ -17,7 +17,7 @@ setup(
     long_description=long_description,
     author='Evan Leis',
     author_email='engineergod@yahoo.com',
-    url='',
+    url='https://github.com/explodes/ezfacebook',
     install_requires=[
         'django>=1.3'
     ],
