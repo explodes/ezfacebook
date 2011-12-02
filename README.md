@@ -83,9 +83,9 @@ This packages comes with the following features:
 
 This package must be installed in your application to use template tags.
 
-#### `absurl` :: `ezfacebook.context.templatetags.absurl`
+#### absurl :: `ezfacebook.context.templatetags.absurl`
 
-##### `absolute_url` :: `ezfacebook.context.templatetags.absurl.absolute_url`
+##### absolute_url :: `ezfacebook.context.templatetags.absurl.absolute_url`
 
 Builds an absolute URL for the given path.
 If request is provided, the protocol (http or https) is determined from the request, otherwise http is used.
@@ -97,11 +97,11 @@ Example:
 	{{ obj.image.url|absolute_url }}
 	{{ obj.image.url|absolute_url:request }}
 
-#### `fb_script` :: `ezfacebook.context.templatetags.fb_script`
+#### fb_script :: `ezfacebook.context.templatetags.fb_script`
 
 These template tags render the HTML required to the Facebook Javascript SDK.
 
-##### `fb_script` :: `ezfacebook.context.templatetags.fb_script.fb_script`
+##### fb_script :: `ezfacebook.context.templatetags.fb_script.fb_script`
 
 Renders the Facebook Javascript SDK script required for facebook connectivity.
 
@@ -119,7 +119,7 @@ Example:
     {# See http://bugs.developers.facebook.net/show_bug.cgi?id=20168= #}
     {% fb_script 'my_first_fb_app' fix_20168=True %} 
 
-##### `fb_script_with_canvas` :: `ezfacebook.context.templatetags.fb_script.fb_script_with_canvas`
+##### fb_script_with_canvas :: `ezfacebook.context.templatetags.fb_script.fb_script_with_canvas`
 
 Renders the Facebook Javascript SDK script required for facebook connectivity and sets the Facebook Canvas size.
     
@@ -147,7 +147,7 @@ This packages comes with the following features:
 
 This package has middleware to help out your application.
 
-#### `IEIFrameApplicationMiddleware` :: `ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware`
+#### IEIFrameApplicationMiddleware :: `ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware`
 
 It is not necessary to install this package as an app to use this middleware.
 
@@ -165,14 +165,14 @@ This packages comes with the following features:
 
 ### Adapter :: `ezfacebook.lib.adapter`
 
-#### `FacebookGraphAPI` :: `ezfacebook.lib.adapter.FacebookGraphAPI`
+#### FacebookGraphAPI :: `ezfacebook.lib.adapter.FacebookGraphAPI`
 
 Wrapper for the "official" `GraphAPI` object, the difference is that this object is aware of guid & token.
 Extend this object to add your most frequently used functions, such as posting a link to a wall, vs posting a picture to a wall...
     
 If you extend this class, be sure to set `FACEBOOK_GRAPH_API_CLASS` in your settings file so that is used by default.
 
-#### `parse_signed_request` :: `ezfacebook.lib.adapter.parse_signed_request`
+#### parse_signed_request :: `ezfacebook.lib.adapter.parse_signed_request`
 
 Parse a signed request based on the secret and return the data (dictionary)
 Returns `None` if the signed_request did not parse properly.
@@ -203,7 +203,7 @@ Example:
     >>> print parse_signed_request(request.POST['signed_request'], 'my_secret')
     None
 
-#### `parse_cookies` :: `ezfacebook.lib.adapter.parse_cookies`
+#### parse_cookies :: `ezfacebook.lib.adapter.parse_cookies`
 
 Parse cookies and return the Facebook GUID and Access Token found in the cookie, or `None`.
     
@@ -217,7 +217,7 @@ Example:
     >>> print parse_cookies(request.cookies, 'my_app_id', 'my_secret')
     None
 
-#### `get_graph_from_cookies` :: `ezfacebook.lib.adapter.get_graph_from_cookies`
+#### get_graph_from_cookies :: `ezfacebook.lib.adapter.get_graph_from_cookies`
 
 Returns a `FacebookGraphAPI` instance or subclass (as specified in the settings), or `None`, based on cookies.
     
@@ -246,7 +246,7 @@ This packages comes with the following features:
 These decorators are used on view functions, they will inject the results as the parameter after request.
 Any other arguments or keyword arguments are still sent to the view.
 
-#### `parseSignedRequest` :: `ezfacebook.user.decorators.parseSignedRequest`
+#### parseSignedRequest :: `ezfacebook.user.decorators.parseSignedRequest`
 
 Injects a decrypted signed_request into your view function.
 It can be `None`.
@@ -283,7 +283,7 @@ Example:
                     return direct_to_template(request, 'liked.html')
         return direct_to_template(request, 'unliked.html')
 			
-#### `graphFromCookies` :: `ezfacebook.user.decorators.graphFromCookies`
+#### graphFromCookies :: `ezfacebook.user.decorators.graphFromCookies`
 
 Injects a `FacebookGraphAPI` (or specified subclass) into your view function.
 It can be `None`.
