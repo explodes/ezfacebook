@@ -60,12 +60,11 @@ Included in the suite are:
         
 ## URLS :: example `urls.py` file
 
-from django.conf.urls.defaults import patterns, include, url
-
-urlpatterns = patterns('',
-    url(r'^fb/', include('ezfacebook.context.urls')),
-)
-
+	from django.conf.urls.defaults import patterns, include, url
+	
+	urlpatterns = patterns('',
+	    url(r'^fb/', include('ezfacebook.context.urls')),
+	)
 
 # Packages
 
