@@ -16,11 +16,9 @@ Included in the suite are:
 - Absolute Url template tag, minds current protocol. Useful for posting links and images.
 - P3P Cookie middleware to enable the use of cookies in your iframes
 
-For installation please see:
-
-(See ezfacebook/example_settings.py and ezfacebook/example_urls.py)
-
 # Installation
+
+(See ezfacebook/example_settings.py and ezfacebook/example_urls.py for examples, or view below)
 
 ## Settings :: example `settings.py` file
 
