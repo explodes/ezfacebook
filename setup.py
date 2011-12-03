@@ -2,7 +2,7 @@
 #-----------------------------------------------------------------------------
 # Copyright (c) 2011, Evan Leis
 #
-# Distributed under the terms of the Lesser GNU General Public License (LGPL)
+# Distributed under the terms of the Apache Software License
 #-----------------------------------------------------------------------------
 
 from setuptools import setup, find_packages
