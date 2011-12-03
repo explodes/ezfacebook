@@ -1,6 +1,6 @@
 # EZ-Facebook Django Utils (for django 1.3+)
 
-*WORKING BETA*
+*FULLY FUNCTIONAL BETA*
 
 The purpose of this package is to make facebook integration easy WITHOUT having to make your whole app depend on this package.
 
@@ -247,7 +247,7 @@ This packages comes with the following features:
 These decorators are used on view functions, they will inject the results as the parameter after request.
 Any other arguments or keyword arguments are still sent to the view.
 
-### parseSignedRequest :: `ezfacebook.user.decorators.parseSignedRequest`
+### parse_signed_request :: `ezfacebook.user.decorators.parse_signed_request`
 
 Injects a decrypted signed_request into your view function.
 It can be `None`.
@@ -284,7 +284,7 @@ Example:
                     return direct_to_template(request, 'liked.html')
         return direct_to_template(request, 'unliked.html')
 			
-### graphFromCookies :: `ezfacebook.user.decorators.graphFromCookies`
+### graph_from_cookies :: `ezfacebook.user.decorators.graph_from_cookies`
 
 Injects a `FacebookGraphAPI` (or specified subclass) into your view function.
 It can be `None`.
