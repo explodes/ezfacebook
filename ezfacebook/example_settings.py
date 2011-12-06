@@ -4,7 +4,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware' # ezfacebook.helpers: Optional
+    'ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware', # ezfacebook.helpers: Optional
+    'ezfacebook.user.middleware.FacebookRequestMiddleware', # ezfacebook.user: Optional
 )
 
 INSTALLED_APPS = (

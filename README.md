@@ -13,7 +13,8 @@ This package makes facebook integration easy for all kinds of web sites:
 Included in the suite are:
 
 - Easy to use facebook settings with debug settings
-- View decorators that extract information from requests, like signed_request, and facebook graph api. 
+- View decorators that extract information from requests, like signed_request, and facebook graph api.
+- NEW: Middleware to apply those decorators to all functions for all defined facebook apps.
 - Facebook script template tags
 - Facebook Channel URL context variable and view
 - Facebook Settings context processors
@@ -31,7 +32,8 @@ Included in the suite are:
 	)
 	
 	MIDDLEWARE_CLASSES = (
-	    'ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware' # ezfacebook.helpers: Optional
+	    'ezfacebook.helpers.middleware.IEIFrameApplicationMiddleware', # ezfacebook.helpers: Optional
+    	'ezfacebook.user.middleware.FacebookRequestMiddleware', # ezfacebook.user: Optional
 	)
 	
 	INSTALLED_APPS = (
@@ -257,6 +259,7 @@ Example:
 
 	from django.conf import settings
     from django.core.urlresolvers import reverse
+    from django.views.generic.simple import direct_to_template
     
     from ezfacebook.context.templatetags import absurl
     from ezfacebook.user import decorators
@@ -294,6 +297,7 @@ Example:
 
 	from django.conf import settings
     from django.core.urlresolvers import reverse
+    from django.views.generic.simple import direct_to_template
     
     from ezfacebook.context.templatetags import absurl
     from ezfacebook.user import decorators
@@ -308,4 +312,46 @@ Example:
         
         return direct_to_template(request, 'success.html')
 			
+## Middleware :: `ezfacebook.user.middleware`
+
+This middleware is used to apply the above decorators to all view functions.
+
+### FacebookRequestMiddleware :: `ezfacebook.user.middleware.FacebookRequestMiddleware`
+
+Put signed_request and graph in the request for each facebook app.
+Like this: `request.ezfb.my_app_name.graph` or `request.ezfb.my_app_name.signed_request`
+
+This cleans up your code so that decorators are not everywhere. However, it does add a little bit of inefficiency when
+your apps are not always being checked against.  Decorators are ugly, but recommended.
+
+Example:
+
+    from django.views.generic.simple import direct_to_template 
+
+	from myapp import models
+    
+    def my_view(request):
+    	"""
+    	An example demonstrating some possibilities of FacebookRequestMiddleware.
+    	"""
+    	
+    	# Get or create a FacebookUser from the graph, if present.
+    
+    	graph = request.ezfb.my_first_fb_app.graph
+        if graph:
+            fbuser = models.FacebookUser.objects.get_or_create(facebook_guid=graph.facebook_guid)
+        else:
+        	fbuser = None
+        return direct_to_template(request, 'my_first_fb_app/index-liked.html', {'fbuser': fbuser})
+        
+        # OR!
+        # Show the index page, a different version if they like my_first_fb_app
+        
+        signed_request = request.ezfb.my_second_fb_app.signed_request
+        if signed_request:
+        	page_data = signed_request.get('page', None)
+        	if page_data and page_data.get('liked', False):
+        		return direct_to_template(request, 'my_second_fb_app/index-liked.html')
+        return direct_to_template(request, 'my_second_fb_app/index-unliked.html')
+        
 		

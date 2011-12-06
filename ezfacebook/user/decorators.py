@@ -36,13 +36,14 @@ def graph_from_cookies(app_name):
             return direct_to_template(request, 'success.html')
     """
     app_settings = settings.app_settings(app_name)
+    injector_method = _graph_from_cookies_method(app_settings)
+    return _inject_arg_decorator(app_settings, injector_method)
 
+def _graph_from_cookies_method(app_settings):
     if app_settings.debug_guid != False and app_settings.debug_token != False:
-        # Use debug mode
-        return _inject_arg_decorator(app_settings, _debug_graph_from_cookies)
+        return _debug_graph_from_cookies
     else:
-        # Use regular mode
-        return _inject_arg_decorator(app_settings, _graph_from_cookies)
+        return _graph_from_cookies
 
 def _debug_graph_from_cookies(request, app_settings):
     graph = adapter._getFacebookGraphAPIClass()(app_settings.debug_guid, app_settings.debug_token)
@@ -88,11 +89,14 @@ def parse_signed_request(app_name):
             return direct_to_template(request, 'unliked.html')
     """
     app_settings = settings.app_settings(app_name)
+    injector_method = _parse_signed_request_method(app_settings)
+    return _inject_arg_decorator(app_settings, injector_method)
 
+def _parse_signed_request_method(app_settings):
     if app_settings.debug_signed_request != False:
-        return _inject_arg_decorator(app_settings, _debug_parse_signed_request)
+        return _debug_parse_signed_request
     else:
-        return _inject_arg_decorator(app_settings, _parse_signed_request)
+        return _parse_signed_request
 
 def _debug_parse_signed_request(request, app_settings):
     signed_request_data = app_settings.debug_signed_request
