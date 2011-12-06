@@ -345,7 +345,7 @@ Example:
         return direct_to_template(request, 'my_first_fb_app/index-liked.html', {'fbuser': fbuser})
         
         # OR!
-        # Show the index page, a different version if they like my_first_fb_app
+        # Show the index page, a different version if they like my_second_fb_app
         
         signed_request = request.ezfb.my_second_fb_app.signed_request
         if signed_request:
