@@ -2,7 +2,7 @@
 #-----------------------------------------------------------------------------
 # Copyright (c) 2011, Evan Leis
 #
-# Distributed under the terms of the Lesser GNU General Public License (LGPL)
+# Distributed under the terms of the Apache Software License
 #-----------------------------------------------------------------------------
 
 from setuptools import setup, find_packages
@@ -12,7 +12,11 @@ with open('README.md') as readme:
 
 setup(
     name='ezfacebook',
+<<<<<<< HEAD
     version='0.75.9',
+=======
+    version='0.75.3',
+>>>>>>> 67546d8ec5064e0baaaa3d4ccefd5638a9f3b065
     description="Django Tools to use facebook seamlessly without having to build around it.",
     long_description=long_description,
     author='Evan Leis',

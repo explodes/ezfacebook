@@ -54,5 +54,35 @@ class Decorators(unittest.TestCase):
         self.assertEqual(arg, 'abc', "arg was faltered")
         self.assertEqual(kwarg, True, "kwarg was faltered")
 
+    def test_parse_signed_request_valid_this_test_will_fail_unless_you_fill_in_your_info(self):
+        from django.conf import settings
+        class fbsettings:
+            class some_app:
+                secret = '' # TODO: Fill this in with your secret
+                debug_signed_request = False
+        settings.FACEBOOK_SETTINGS = fbsettings
+        @decorators.parse_signed_request('some_app')
+        def my_view(request, signed_request):
+            return signed_request
+        class request:
+            def __init__(self, signed_request):
+                self.POST = dict(signed_request=signed_request)
+        valid_signed_request = '' # TODO: Fill this in with a valid signed_request
+        self.assertNotEqual(my_view(request(valid_signed_request)), None)
 
+    def test_parse_signed_request_invalid(self):
+        from django.conf import settings
+        class fbsettings:
+            class some_app:
+                secret = ''
+                debug_signed_request = False
+        settings.FACEBOOK_SETTINGS = fbsettings
+        @decorators.parse_signed_request('some_app')
+        def my_view(request, signed_request):
+            return signed_request
+        class request:
+            def __init__(self, signed_request):
+                self.POST = dict(signed_request=signed_request)
+        self.assertEqual(my_view(request('abc')), None)
+        
 

@@ -105,6 +105,9 @@ def _debug_parse_signed_request(request, app_settings):
 def _parse_signed_request(request, app_settings):
     signed_request = request.POST.get('signed_request', None)
     if signed_request:
-        return adapter.parse_signed_request(signed_request, app_settings.secret)
+        try:
+            return adapter.parse_signed_request(signed_request, app_settings.secret)
+        except:
+            return None
 
 
