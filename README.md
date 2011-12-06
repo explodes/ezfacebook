@@ -59,10 +59,8 @@ Included in the suite are:
 	        app_id = '11111111111111',
 	        secret = '9876543210abcdef',
 	        scope = ''
-	
-	        debug_signed_request = False
-	        debug_guid = False
-	        debug_token = False
+        	# Disable debugging by omitting the debug settings or by setting them to false
+
         
 ## URLS :: example `urls.py` file
 
