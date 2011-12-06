@@ -40,7 +40,7 @@ def graph_from_cookies(app_name):
     return _inject_arg_decorator(app_settings, injector_method)
 
 def _graph_from_cookies_method(app_settings):
-    if app_settings.debug_guid != False and app_settings.debug_token != False:
+    if hasattr(app_settings, 'debug_guid') and app_settings.debug_guid != False and hasattr(app_settings, 'debug_token') and app_settings.debug_token != False:
         return _debug_graph_from_cookies
     else:
         return _graph_from_cookies
@@ -93,7 +93,7 @@ def parse_signed_request(app_name):
     return _inject_arg_decorator(app_settings, injector_method)
 
 def _parse_signed_request_method(app_settings):
-    if app_settings.debug_signed_request != False:
+    if hasattr(app_settings, 'debug_signed_request') and app_settings.debug_signed_request != False:
         return _debug_parse_signed_request
     else:
         return _parse_signed_request
