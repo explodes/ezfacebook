@@ -1,2 +1,2 @@
-recursive-include ezfacebook *.txt *.py
+recursive-include ezfacebook *.py
 include README.md
