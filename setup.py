@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Copyright (c) 2011, Evan Leis
@@ -18,7 +19,7 @@ setup(
     name='ezfacebook',
     version='0.81.0',
     description="Django Tools to use facebook seamlessly without having to build around it.",
-    long_description=long_description,
+    long_description='long_description',
     author='Evan Leis',
     author_email='engineergod@yahoo.com',
     url='https://github.com/explodes/ezfacebook',
