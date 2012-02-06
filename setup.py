@@ -5,14 +5,18 @@
 # Distributed under the terms of the Apache Software License
 #-----------------------------------------------------------------------------
 
+import os
+
 from setuptools import setup, find_packages
 
-with open('README.md') as readme:
+rel = lambda * x: os.path.abspath(os.path.join(os.path.dirname(__file__), *x))
+
+with open(rel('./README.md')) as readme:
     long_description = readme.read()
 
 setup(
     name='ezfacebook',
-    version='0.80.0',
+    version='0.81.0',
     description="Django Tools to use facebook seamlessly without having to build around it.",
     long_description=long_description,
     author='Evan Leis',
