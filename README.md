@@ -47,17 +47,17 @@ Included in the suite are:
 	class FACEBOOK_SETTINGS: # ezfacebook.user, ezfacebook.context: Requirement
 	
 	    class my_first_fb_app:
-	        app_id = '00000000000000',
-	        secret = 'abcdef0123456789',
+	        app_id = '00000000000000'
+	        secret = 'abcdef0123456789'
 	        scope = 'email,publish_stream,offline_access'
 	
-	        debug_signed_request = {'id': 23840238402834} # 
-	        debug_guid = 23840238402834
-	        debug_token = 'AAAAAAAAAbbbbbbbbbbccccdefffffffffffffffffffetc'
+	        debug_signed_request = {'id': 23840238402834} # Simulate the JSON returned by a decoded and parsed signed request
+	        debug_guid = 23840238402834 # Pretend the Facebook user has this Facebook GUID
+	        debug_token = 'AAAAAAAAAbbbbbbbbbbccccdefffffffffffffffffffetc' # Pretend the Facebook user has this access token
 	
 	    class my_second_fb_app:
-	        app_id = '11111111111111',
-	        secret = '9876543210abcdef',
+	        app_id = '11111111111111'
+	        secret = '9876543210abcdef'
 	        scope = ''
         	# Disable debugging by omitting the debug settings or by setting them to false
 
