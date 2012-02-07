@@ -282,7 +282,6 @@ class AccessTokenCache(object):
         self._cache = []
 
     def get_token(self, app, secret, code):
-        print 'AccessTokenCache: get_token'
         item = self.get_item_in_cache(app, secret, code)
         if item is None:
             item = AccessTokenCacheItem(app, secret, code)
@@ -290,7 +289,6 @@ class AccessTokenCache(object):
         return item.get_token()
 
     def get_item_in_cache(self, app, secret, code):
-        print 'AccessTokenCache: get_item_in_cache'
         for item in self._cache:
             if item.app == app and item.secret == secret and item.code == code:
                 return item
@@ -298,7 +296,6 @@ class AccessTokenCache(object):
 class AccessTokenCacheItem(object):
 
     def __init__(self, app, secret, code):
-        print 'AccessTokenCacheItem: __init__'
         self.app = app
         self.secret = secret
         self.code = code
@@ -307,13 +304,11 @@ class AccessTokenCacheItem(object):
         self.expires = datetime.now()
 
     def get_token(self):
-        print 'AccessTokenCacheItem: get_token'
         if self.token is None or self.expires < datetime.now():
             self.get_token_from_facebook()
         return self.token
 
     def get_token_from_facebook(self):
-        print 'AccessTokenCacheItem: get_token_from_facebook'
         args = dict(
             code=self.code,
             client_id=self.app,
@@ -326,7 +321,6 @@ class AccessTokenCacheItem(object):
         file_ = urllib.urlopen("https://graph.facebook.com/oauth/access_token?" + q_args)
         try:
             token_response = file_.read()
-            print token_response
         finally:
             file_.close()
 
