@@ -17,7 +17,7 @@ with open(rel('./README.md')) as readme:
 
 setup(
     name='ezfacebook',
-    version='0.82.0',
+    version='0.83.0',
     description="Django Tools to use facebook seamlessly without having to build around it.",
     long_description=long_description,
     author='Evan Leis',

@@ -19,6 +19,7 @@ THIS FILE HAS BEEN MODIFIED BY EVAN LEIS.
 MODIFICATIONS INCLUDE BUT ARE NOT LIMITED TO:
 - RENAMING VARIABLES
 - FIXING BUGS
+- CACHE ACCESS TOKENS
 """
 
 """Python client library for the Facebook Platform.
@@ -43,6 +44,7 @@ usage of this module might look like this:
 import cgi
 import hashlib
 import urllib
+from datetime import datetime, timedelta
 
 # Find a JSON parser
 try:
@@ -240,8 +242,6 @@ def parse_signed_request(signed_request, secret):
 
     return {}
 
-
-
 def get_user_from_cookie(cookies, app_id, app_secret):
     """Parses the cookie set by the official Facebook JavaScript SDK.
 
@@ -266,20 +266,7 @@ def get_user_from_cookie(cookies, app_id, app_secret):
     if not response:
         return None
 
-    args = dict(
-        code=response['code'],
-        client_id=app_id,
-        client_secret=app_secret,
-        redirect_uri='',
-    )
-
-    file_ = urllib.urlopen("https://graph.facebook.com/oauth/access_token?" + urllib.urlencode(args))
-    try:
-        token_response = file_.read()
-    finally:
-        file_.close()
-
-    access_token = cgi.parse_qs(token_response).get("access_token", [None])[-1]
+    access_token = AccessTokenCache.get_token(app_id, app_secret, response.get('code', None))
 
     if access_token is None:
         return None
@@ -288,3 +275,67 @@ def get_user_from_cookie(cookies, app_id, app_secret):
         uid=response["user_id"],
         access_token=access_token,
     )
+
+class AccessTokenCache(object):
+
+    def __init__(self):
+        self._cache = []
+
+    def get_token(self, app, secret, code):
+        print 'AccessTokenCache: get_token'
+        item = self.get_item_in_cache(app, secret, code)
+        if item is None:
+            item = AccessTokenCacheItem(app, secret, code)
+            self._cache.append(item)
+        return item.get_token()
+
+    def get_item_in_cache(self, app, secret, code):
+        print 'AccessTokenCache: get_item_in_cache'
+        for item in self._cache:
+            if item.app == app and item.secret == secret and item.code == code:
+                return item
+
+class AccessTokenCacheItem(object):
+
+    def __init__(self, app, secret, code):
+        print 'AccessTokenCacheItem: __init__'
+        self.app = app
+        self.secret = secret
+        self.code = code
+
+        self.token = None
+        self.expires = datetime.now()
+
+    def get_token(self):
+        print 'AccessTokenCacheItem: get_token'
+        if self.token is None or self.expires < datetime.now():
+            self.get_token_from_facebook()
+        return self.token
+
+    def get_token_from_facebook(self):
+        print 'AccessTokenCacheItem: get_token_from_facebook'
+        args = dict(
+            code=self.code,
+            client_id=self.app,
+            client_secret=self.secret,
+            redirect_uri='',
+        )
+
+        q_args = urllib.urlencode(args)
+
+        file_ = urllib.urlopen("https://graph.facebook.com/oauth/access_token?" + q_args)
+        try:
+            token_response = file_.read()
+            print token_response
+        finally:
+            file_.close()
+
+        parsed = cgi.parse_qs(token_response)
+        access_token = parsed.get("access_token", [None])[-1]
+        expires = parsed.get("expires", [0])[-1]
+
+        self.token = access_token
+        self.expires = datetime.now() + timedelta(seconds=int(expires - 1)) # Shave a second
+
+
+AccessTokenCache = AccessTokenCache()
