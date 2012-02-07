@@ -329,7 +329,7 @@ class AccessTokenCacheItem(object):
         expires = parsed.get("expires", [0])[-1]
 
         self.token = access_token
-        self.expires = datetime.now() + timedelta(seconds=int(expires - 1)) # Shave a second
+        self.expires = datetime.now() + timedelta(seconds=int(expires) - 1) # Shave a second
 
 
 AccessTokenCache = AccessTokenCache()
