@@ -6,7 +6,7 @@ facebook-channel-url: URL to "channel.html" i.e. //mysitedomain.com/facebookchan
 
 """
 
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 from . import views
 
